@@ -1,0 +1,21 @@
+{
+  "watch": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.json"
+  ],
+  "ext": "ts,js,json",
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "exec": "ts-node --esm src/server.ts",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "restartable": "rs",
+  "delay": 1000,
+  "verbose": true
+}

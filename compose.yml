@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: morg3a-postgres
+    environment:
+      POSTGRES_DB: morg3a
+      POSTGRES_USER: morg3a_user
+      POSTGRES_PASSWORD: morg3a_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  garage:
+    image: dxflrs/garage:v1.0.1
+    container_name: morg3a-garage
+    environment:
+      GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
+    ports:
+      - "3902:3902"
+    volumes:
+      - garage_data:/var/lib/garage/data
+      - garage_meta:/var/lib/garage/meta
+      - ./garage.toml:/etc/garage.toml:ro
+    command: ["garage", "-c", "/etc/garage.toml", "server"]
+
+  api:
+    build: .
+    container_name: morg3a-api
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: morg3a_user
+      DB_PASSWORD: morg3a_password
+      DB_NAME: morg3a
+      S3_ENDPOINT: ${S3_ENDPOINT:-http://garage:3902}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+      S3_BUCKET: ${S3_BUCKET:-morg3a-files}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - garage
+
+volumes:
+  postgres_data:
+  garage_data:
+  garage_meta:
