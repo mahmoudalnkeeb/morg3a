@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { parseCorsOrigin } from "../utils/string.ts";
+import { parseCorsOrigin } from "../utils/strings.ts";
 
 export const environment = process.env.NODE_ENV || "development";
 
@@ -13,6 +13,7 @@ export const config = {
     user: process.env.DB_USER as string,
     password: process.env.DB_PASSWORD as string,
     database: process.env.DB_NAME as string,
+    ssl: environment === "production",
   },
   corsOptions: {
     origin: parseCorsOrigin(process.env.CORS_ORIGIN || "*"),
