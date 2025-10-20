@@ -1,14 +1,15 @@
 import { students } from "../../db/schema/index.ts";
 import { db } from "../../db";
 import { CreateStudentDto } from "./dtos/create-student.dto";
+import { StudentDTO } from "./dtos/student.dto.ts";
 
 export async function createStudent(
   data: CreateStudentDto,
-): Promise<number | undefined> {
-  const student = await db
+): Promise<StudentDTO | undefined> {
+  const student: StudentDTO[] = await db
     .insert(students)
     .values(data)
-    .returning({ id: students.id });
+    .returning();
 
-  return student[0]?.id;
+  return student[0];
 }
