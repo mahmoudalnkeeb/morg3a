@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { errorResponse } from "../utils/messages.ts";
+import { errorResponse } from "../utils/messages";
 
 export default function notFound(
   req: Request,

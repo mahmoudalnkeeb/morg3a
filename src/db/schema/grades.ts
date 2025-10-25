@@ -1,6 +1,6 @@
 import {
   pgTable,
-  uuid,
+  serial,
   varchar,
   smallint,
   boolean,
@@ -8,10 +8,10 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const grades = pgTable("grades", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  specialization: varchar("specialization", { length: 100 }),
-  year: smallint("year"),
+  specialization: varchar("specialization", { length: 100 }).notNull(),
+  year: smallint("year").notNull(),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

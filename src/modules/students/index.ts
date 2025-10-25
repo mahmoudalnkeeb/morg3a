@@ -1,10 +1,12 @@
 import { Router } from "express";
-import type { Request, Response, NextFunction } from "express";
+import * as studentsController from "./controller";
 
 const studentsModule = Router();
 
-studentsModule.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({ message: "Students module" });
-});
+studentsModule.get("/", studentsController.getStudents);
+studentsModule.get("/:id", studentsController.getStudent);
+studentsModule.post("/", studentsController.createStudent);
+studentsModule.patch("/:id", studentsController.updateStudent);
+studentsModule.delete("/:id", studentsController.deleteStudent);
 
 export default studentsModule;

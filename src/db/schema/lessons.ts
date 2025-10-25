@@ -1,6 +1,6 @@
 import {
   pgTable,
-  uuid,
+  serial,
   varchar,
   integer,
   timestamp,
@@ -8,8 +8,8 @@ import {
 import { courses } from "./courses";
 
 export const lessons = pgTable("lessons", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  courseId: uuid("course_id")
+  id: serial("id").primaryKey(),
+  courseId: integer("course_id")
     .references(() => courses.id, { onDelete: "cascade" })
     .notNull(),
   title: varchar("title", { length: 200 }).notNull(),

@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { config } from "./config/index.ts";
-import studentsModule from "./modules/students/index.ts";
-import errorHandler from "./middlewares/error.ts";
-import notFound from "./middlewares/notFound.ts";
-import { db } from "./db/index.ts";
+import { config } from "@/config";
+import errorHandler from "@/middlewares/error";
+import notFound from "@/middlewares/notFound";
+import { db } from "@/db";
+import studentsModule from "@/modules/students";
+import gradesModule from "@/modules/grades";
 
 const app = express();
 
@@ -41,6 +42,7 @@ apiRouter.use(
 
 // Register modules
 apiRouter.use("/students", studentsModule);
+apiRouter.use("/grades", gradesModule);
 
 app.use("/api", apiRouter);
 

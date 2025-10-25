@@ -1,5 +1,5 @@
-import app from "./app.ts";
-import { config } from "./config/index.ts";
+import app from "@/app";
+import { config } from "@/config";
 
 const port = config.app.port;
 app.listen(port, () => {

@@ -1,10 +1,17 @@
-import { pgTable, uuid, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  varchar,
+  timestamp,
+  integer,
+} from "drizzle-orm/pg-core";
 import { ticketCategoryEnum, ticketStatusEnum } from "./enums";
 import { students } from "./students";
 
 export const supportTickets = pgTable("support_tickets", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  studentId: uuid("student_id")
+  id: serial("id").primaryKey(),
+  studentId: integer("student_id")
     .references(() => students.id, { onDelete: "cascade" })
     .notNull(),
   category: ticketCategoryEnum("category").notNull(),

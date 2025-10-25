@@ -1,10 +1,10 @@
 import z from "zod";
 import { StudentDTO } from "./student.dto";
 
-export const CreateStudentDto = StudentDTO.omit({
+export const CreateStudentDTO = StudentDTO.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
-export type CreateStudentDto = z.infer<typeof CreateStudentDto>;
+export type CreateStudentDTO = z.infer<typeof CreateStudentDTO>;

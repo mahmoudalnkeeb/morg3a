@@ -1,22 +1,48 @@
-interface ApiResponse {
-  status: "success" | "error";
-  message: string;
-  data?: any;
-  error?: any;
-}
+type SuccessResponse<T = any> = {
+  status: "success";
+  data: T;
+};
 
-export function successResponse(message: string, data?: any): ApiResponse {
+type FailResponse<T = any> = {
+  status: "fail";
+  data: T;
+};
+
+type ErrorResponse = {
+  status: "error";
+  message: string;
+  code?: string | number;
+  data?: any;
+};
+
+export type ApiResponse<T = any> =
+  | SuccessResponse<T>
+  | FailResponse<T>
+  | ErrorResponse;
+
+export function successResponse<T = any>(data: T): SuccessResponse<T> {
   return {
     status: "success",
-    message,
     data,
   };
 }
 
-export function errorResponse(message: string, error?: any): ApiResponse {
+export function failResponse<T = any>(data: T): FailResponse<T> {
+  return {
+    status: "fail",
+    data,
+  };
+}
+
+export function errorResponse(
+  message: string,
+  code?: string | number,
+  data?: any,
+): ErrorResponse {
   return {
     status: "error",
     message,
-    error,
+    ...(code && { code }),
+    ...(data && { data }),
   };
 }

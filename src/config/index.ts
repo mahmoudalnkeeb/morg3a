@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { parseCorsOrigin } from "../utils/strings.ts";
+// import "dotenv/config";
+import { parseCorsOrigin } from "@/utils/strings";
 
 export const environment = process.env.NODE_ENV || "development";
 
