@@ -7,6 +7,11 @@ import notFound from "@/middlewares/notFound";
 import { db } from "@/db";
 import studentsModule from "@/modules/students";
 import gradesModule from "@/modules/grades";
+import staffModule from "@/modules/staff";
+import coursesModule from "@/modules/courses";
+import lessonsModule from "@/modules/lessons";
+import quizzesModule from "@/modules/quizzes";
+import supportModule from "@/modules/support";
 
 const app = express();
 
@@ -43,6 +48,11 @@ apiRouter.use(
 // Register modules
 apiRouter.use("/students", studentsModule);
 apiRouter.use("/grades", gradesModule);
+apiRouter.use("/staff", staffModule);
+apiRouter.use("/courses", coursesModule);
+apiRouter.use("/lessons", lessonsModule);
+apiRouter.use("/quizzes", quizzesModule);
+apiRouter.use("/support", supportModule);
 
 app.use("/api", apiRouter);
 
