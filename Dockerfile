@@ -4,7 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci
-COPY . .
+
+COPY tsconfig*.json ./
+COPY src ./src
+
+# Use tsconfig.build.json to emit JS + type declarations
 RUN npm run build
 
 # Stage 2: Production
@@ -14,8 +18,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
+# Copy compiled output from builder
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
-ENTRYPOINT ["node"]
-CMD ["dist/server.js"]
+CMD ["node", "dist/server.js"]
