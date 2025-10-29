@@ -5,12 +5,13 @@ flowchart TD
 
 A[Landing Page] --> B{User Type?}
 
-B -->|Student| S1[Login/Register]
-S1 --> S2[View Enrolled Courses]
+B -->|Student| S1[Login]
+S1 --> S2[View Enrolled Courses Based On Grade]
 S2 --> S3[Open Lessons]
 S3 --> S4[Watch Video / Download Document / Take Quiz]
-S4 --> S5[Submit Support Ticket if Issue]
-S5 --> S6[View FAQs]
+S1 --> S5[Submit Support Ticket if Issue]
+S1 --> S6[View FAQs]
+
 
 B -->|Teacher| T1[Login as Teacher]
 T1 --> T2[Create/Edit Courses]

@@ -1,8 +1,9 @@
 import {
   pgTable,
-  uuid,
   varchar,
+  serial,
   text,
+  integer,
   boolean,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -10,13 +11,13 @@ import { staff } from "./staff";
 import { grades } from "./grades";
 
 export const courses = pgTable("courses", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: serial("id").primaryKey(),
   title: varchar("title", { length: 200 }).notNull(),
   description: text("description"),
-  teacherId: uuid("teacher_id")
+  teacherId: integer("teacher_id")
     .references(() => staff.id, { onDelete: "cascade" })
     .notNull(),
-  gradeId: uuid("grade_id").references(() => grades.id, {
+  gradeId: integer("grade_id").references(() => grades.id, {
     onDelete: "set null",
   }),
   isActive: boolean("is_active").default(true),

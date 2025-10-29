@@ -1,20 +1,30 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { config } from "./config/index.ts";
+import { config, logger } from "@/config";
+import errorHandler from "@/middlewares/error";
+import notFound from "@/middlewares/notFound";
+import { db } from "@/db";
+import studentsModule from "@/modules/students";
+import gradesModule from "@/modules/grades";
+import staffModule from "@/modules/staff";
+import coursesModule from "@/modules/courses";
+import lessonsModule from "@/modules/lessons";
+import quizzesModule from "@/modules/quizzes";
+import supportModule from "@/modules/support";
 
 const app = express();
 
+db.execute("SELECT 1")
+  .then(() => {
+    logger.info("Database connection successful");
+  })
+  .catch((error) => {
+    logger.error("Database connection failed:", error);
+  });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(config.corsOptions));
-app.use(
-  helmet({
-    hidePoweredBy: true,
-    noSniff: true,
-    dnsPrefetchControl: { allow: false },
-  }),
-);
 
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -23,5 +33,31 @@ app.get("/health", (req, res) => {
     uptime: process.uptime(),
   });
 });
+
+const apiRouter = express.Router();
+
+apiRouter.use(cors(config.corsOptions));
+apiRouter.use(
+  helmet({
+    hidePoweredBy: true,
+    noSniff: true,
+    dnsPrefetchControl: { allow: false },
+  }),
+);
+
+// Register modules
+apiRouter.use("/students", studentsModule);
+apiRouter.use("/grades", gradesModule);
+apiRouter.use("/staff", staffModule);
+apiRouter.use("/courses", coursesModule);
+apiRouter.use("/lessons", lessonsModule);
+apiRouter.use("/quizzes", quizzesModule);
+apiRouter.use("/support", supportModule);
+
+app.use("/api", apiRouter);
+
+// Global middlewares
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
