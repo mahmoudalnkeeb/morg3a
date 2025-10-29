@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { config } from "@/config";
+import { config, logger } from "@/config";
 import errorHandler from "@/middlewares/error";
 import notFound from "@/middlewares/notFound";
 import { db } from "@/db";
@@ -17,10 +17,10 @@ const app = express();
 
 db.execute("SELECT 1")
   .then(() => {
-    console.log("Database connection successful");
+    logger.info("Database connection successful");
   })
   .catch((error) => {
-    console.error("Database connection failed:", error);
+    logger.error("Database connection failed:", error);
   });
 
 app.use(express.json());

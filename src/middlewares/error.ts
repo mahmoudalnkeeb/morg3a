@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { errorResponse } from "@/utils/messages";
 import z from "zod";
 import { NotFoundError } from "@/utils/errors";
+import { logger } from "@/config";
 
 export default function errorHandler(
   err: Error | NotFoundError | z.ZodError,
@@ -10,7 +11,8 @@ export default function errorHandler(
   _next: NextFunction,
 ) {
   if (err) {
-    // TODO: log the error using the logger
+    logger.error(err);
+
     let message = err.message || "Internal Server Error";
     let body = {};
     let code = 500;
