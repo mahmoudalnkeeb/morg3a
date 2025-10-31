@@ -28,13 +28,14 @@ export const config = {
   },
   s3: {
     config: {
-      endpoint: process.env.S3_ENDPOINT as string,
+      endpoint: process.env.S3_ENDPOINT as string, // http://minio:9000 for Docker
       region: process.env.S3_REGION as string,
       credentials: {
         accessKeyId: process.env.S3_ACCESS_KEY as string,
         secretAccessKey: process.env.S3_SECRET_KEY as string,
       },
     },
+    publicEndpoint: process.env.S3_PUBLIC_ENDPOINT || "http://localhost:9000", // For presigned URLs
     bucket: process.env.S3_BUCKET as string,
   },
 };
