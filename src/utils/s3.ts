@@ -1,12 +1,14 @@
-import { config, s3 } from "@/config";
+import { config, s3, s3Public } from "@/config";
 import {
-  CreateMultipartUploadCommand,
-  UploadPartCommand,
-  CompleteMultipartUploadCommand,
   AbortMultipartUploadCommand,
-  ListPartsCommand,
   CompletedPart,
+  CompleteMultipartUploadCommand,
+  CreateMultipartUploadCommand,
+  GetObjectCommand,
+  ListPartsCommand,
+  UploadPartCommand,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const BUCKET = config.s3.bucket;
 
@@ -62,7 +64,9 @@ export async function completeMultipartUpload(params: {
     MultipartUpload: { Parts: params.parts },
   });
   const res = await s3.send(cmd);
-  return res.Location!;
+
+  const presignedUrl = await getPresignedUrl(params.filename);
+  return presignedUrl;
 }
 
 export async function abortMultipartUpload(uploadId: string, filename: string) {
@@ -72,4 +76,17 @@ export async function abortMultipartUpload(uploadId: string, filename: string) {
     UploadId: uploadId,
   });
   await s3.send(cmd);
+}
+
+export async function getPresignedUrl(
+  filename: string,
+  expiresIn: number = 3600,
+): Promise<string> {
+  const cmd = new GetObjectCommand({
+    Bucket: BUCKET,
+    Key: filename,
+  });
+
+  const presignedUrl = await getSignedUrl(s3Public, cmd, { expiresIn });
+  return presignedUrl;
 }

@@ -12,6 +12,7 @@ import coursesModule from "@/modules/courses";
 import lessonsModule from "@/modules/lessons";
 import quizzesModule from "@/modules/quizzes";
 import supportModule from "@/modules/support";
+import uploadsModule from "./modules/uploads";
 
 const app = express();
 
@@ -23,7 +24,7 @@ db.execute("SELECT 1")
     logger.error("Database connection failed:", error);
   });
 
-app.use(express.json());
+app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/health", (req, res) => {
@@ -53,6 +54,7 @@ apiRouter.use("/courses", coursesModule);
 apiRouter.use("/lessons", lessonsModule);
 apiRouter.use("/quizzes", quizzesModule);
 apiRouter.use("/support", supportModule);
+apiRouter.use("/upload", uploadsModule);
 
 app.use("/api", apiRouter);
 

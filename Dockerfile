@@ -7,8 +7,6 @@ RUN npm ci
 
 COPY tsconfig*.json ./
 COPY src ./src
-
-# Use tsconfig.build.json to emit JS + type declarations
 RUN npm run build
 
 # Stage 2: Production
@@ -18,8 +16,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-# Copy compiled output from builder
+# Copy compiled output
 COPY --from=builder /app/dist ./dist
+COPY drizzle.config.ts ./drizzle.config.ts
 
 EXPOSE 3000
 CMD ["node", "dist/server.js"]

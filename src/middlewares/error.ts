@@ -12,6 +12,7 @@ export default function errorHandler(
 ) {
   if (err) {
     logger.error(err);
+    console.error(err);
 
     let message = err.message || "Internal Server Error";
     let body = {};
