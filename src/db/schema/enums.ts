@@ -20,3 +20,4 @@ export const ticketCategoryEnum = pgEnum("ticket_category", [
   "payment",
   "general",
 ]);
+export const userTypeEnum = pgEnum("user_type", ["staff", "student"]);
