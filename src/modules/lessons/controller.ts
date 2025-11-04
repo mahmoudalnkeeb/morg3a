@@ -1,8 +1,10 @@
-import type { Request, Response } from "express";
-import * as lessonService from "./service";
-import { CreateLessonDTO } from "./dtos/create-lesson.dto";
-import { failResponse, successResponse } from "@/utils/messages";
-import { UpdateLessonDTO } from "./dtos/update-lesson.dto";
+import type { Request, Response } from 'express';
+
+import { CreateLessonDTO } from './dtos/create-lesson.dto';
+import { UpdateLessonDTO } from './dtos/update-lesson.dto';
+import * as lessonService from './service';
+
+import { failResponse, successResponse } from '@/utils/messages';
 
 export async function getLessons(req: Request, res: Response) {
   const page = Number(req.query.page || 1);
@@ -13,8 +15,7 @@ export async function getLessons(req: Request, res: Response) {
 
 export async function getLesson(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const lesson = await lessonService.getLesson(id);
   res.json(successResponse(lesson));
 }
@@ -27,8 +28,7 @@ export async function createLesson(req: Request, res: Response) {
 
 export async function updateLesson(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const data = await UpdateLessonDTO.parseAsync(req.body);
   const lesson = await lessonService.updateLesson(id, data);
   res.json(successResponse(lesson));
@@ -36,8 +36,7 @@ export async function updateLesson(req: Request, res: Response) {
 
 export async function deleteLesson(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const deleted = await lessonService.deleteLesson(id);
   res.json(successResponse(deleted));
 }

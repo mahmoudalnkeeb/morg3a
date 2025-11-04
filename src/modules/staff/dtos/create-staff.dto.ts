@@ -1,5 +1,6 @@
-import z from "zod";
-import { StaffDTO } from "./staff.dto";
+import type z from 'zod';
+
+import { StaffDTO } from './staff.dto';
 
 export const CreateStaffDTO = StaffDTO.omit({
   id: true,

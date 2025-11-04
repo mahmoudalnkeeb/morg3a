@@ -1,9 +1,11 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { CreateStudentDTO } from "./dtos/create-student.dto";
-import { StudentDTO, StudentInfo } from "./dtos/student.dto";
-import { eq } from "drizzle-orm";
-import { grades, students } from "@/db/schema";
-import { UpdateStudentDTO } from "./dtos/update-student.dto";
+import { eq } from 'drizzle-orm';
+import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { type CreateStudentDTO } from './dtos/create-student.dto';
+import { type StudentDTO, type StudentInfo } from './dtos/student.dto';
+import { type UpdateStudentDTO } from './dtos/update-student.dto';
+
+import { grades, students } from '@/db/schema';
 
 export function createStudentsRepository(db: NodePgDatabase) {
   async function getStudents(page = 1, limit = 10): Promise<StudentDTO[]> {
@@ -35,18 +37,12 @@ export function createStudentsRepository(db: NodePgDatabase) {
   }
 
   async function createStudent(data: CreateStudentDTO): Promise<StudentDTO> {
-    const student: StudentDTO[] = await db
-      .insert(students)
-      .values(data)
-      .returning();
+    const student: StudentDTO[] = await db.insert(students).values(data).returning();
 
     return student[0];
   }
 
-  async function updateStudent(
-    id: number,
-    data: UpdateStudentDTO,
-  ): Promise<StudentDTO> {
+  async function updateStudent(id: number, data: UpdateStudentDTO): Promise<StudentDTO> {
     const student: StudentDTO[] = await db
       .update(students)
       .set(data)

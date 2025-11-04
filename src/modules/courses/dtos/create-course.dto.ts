@@ -1,5 +1,6 @@
-import z from "zod";
-import { CourseDTO } from "./course.dto";
+import type z from 'zod';
+
+import { CourseDTO } from './course.dto';
 
 export const CreateCourseDTO = CourseDTO.omit({
   id: true,

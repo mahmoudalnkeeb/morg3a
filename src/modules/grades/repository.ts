@@ -1,9 +1,11 @@
-import { grades } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { GradeDTO } from "./dtos/grade.dto";
-import { CreateGradeDTO } from "./dtos/create-grade.dto";
-import { UpdateGradeDTO } from "./dtos/update-grade.dto";
+import { eq } from 'drizzle-orm';
+import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { type CreateGradeDTO } from './dtos/create-grade.dto';
+import { type GradeDTO } from './dtos/grade.dto';
+import { type UpdateGradeDTO } from './dtos/update-grade.dto';
+
+import { grades } from '@/db/schema';
 
 export function createGradesRepository(db: NodePgDatabase) {
   async function getGrades(page = 1, limit = 10): Promise<GradeDTO[] | []> {
@@ -33,10 +35,7 @@ export function createGradesRepository(db: NodePgDatabase) {
     return grade[0];
   }
 
-  async function updateGrade(
-    id: number,
-    data: UpdateGradeDTO,
-  ): Promise<GradeDTO> {
+  async function updateGrade(id: number, data: UpdateGradeDTO): Promise<GradeDTO> {
     const grade: GradeDTO[] = await db
       .update(grades)
       .set(data)

@@ -1,12 +1,13 @@
-import { logger } from "@/config";
+import type { Request, Response } from 'express';
+
+import { logger } from '@/config';
 import {
   abortMultipartUpload,
   completeMultipartUpload,
   initMultipartUpload,
   listUploadedParts,
   uploadPart,
-} from "@/utils/s3";
-import type { Request, Response } from "express";
+} from '@/utils/s3';
 
 type Part = {
   filename: string;
@@ -16,22 +17,19 @@ type Part = {
   isLast: false;
 };
 
-type FirstPart = Omit<Part, "uploadId"> & { contentType: string };
+type FirstPart = Omit<Part, 'uploadId'> & { contentType: string };
 
 export async function upload(req: Request, res: Response) {
-  const part: FirstPart | Part = req.body;
+  const part: FirstPart | Part = req.body as FirstPart | Part;
 
   logger.info(`uploading part number ${part.partNumber}`);
 
   const uploadId =
-    req.body.partNumber === 1
-      ? await initMultipartUpload(
-          part.filename,
-          (part as FirstPart).contentType,
-        )
+    part.partNumber === 1
+      ? await initMultipartUpload(part.filename, (part as FirstPart).contentType)
       : (part as Part).uploadId;
 
-  const buffer = Buffer.from(part.chunk, "base64");
+  const buffer = Buffer.from(part.chunk, 'base64');
 
   const partEtag = await uploadPart({
     filename: part.filename,
@@ -51,8 +49,8 @@ export async function upload(req: Request, res: Response) {
 
     // send the file location
     res.status(201).json({
-      status: "success",
-      message: "file uploaded",
+      status: 'success',
+      message: 'file uploaded',
       data: {
         location,
         isDone: true,
@@ -62,8 +60,8 @@ export async function upload(req: Request, res: Response) {
   }
 
   res.status(201).json({
-    status: "success",
-    message: "part uploaded",
+    status: 'success',
+    message: 'part uploaded',
     data: {
       partEtag,
       uploadId,
@@ -73,12 +71,12 @@ export async function upload(req: Request, res: Response) {
 }
 
 export async function abortUpload(req: Request, res: Response) {
-  const { uploadId, filename } = req.body;
+  const { uploadId, filename } = req.body as { uploadId: string; filename: string };
 
   await abortMultipartUpload(uploadId, filename);
 
   res.status(200).json({
-    status: "success",
-    message: "file upload aborted",
+    status: 'success',
+    message: 'file upload aborted',
   });
 }

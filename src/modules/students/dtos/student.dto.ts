@@ -1,7 +1,8 @@
-import { students } from "@/db/schema";
-import { GradeDTO } from "@/modules/grades/dtos/grade.dto";
-import { createSelectSchema } from "drizzle-zod";
-import z from "zod";
+import { createSelectSchema } from 'drizzle-zod';
+import type z from 'zod';
+
+import { students } from '@/db/schema';
+import { type GradeDTO } from '@/modules/grades/dtos/grade.dto';
 
 export const StudentDTO = createSelectSchema(students);
 

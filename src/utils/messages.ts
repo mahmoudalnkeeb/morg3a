@@ -1,48 +1,50 @@
-type SuccessResponse<T = any> = {
-  status: "success";
+type Data = Record<string, string>;
+
+type SuccessResponse<T = Data> = {
+  status: 'success';
   data: T;
 };
 
-type FailResponse<T = any> = {
-  status: "fail";
+type FailResponse<T = Data> = {
+  status: 'fail';
   data: T;
 };
 
-type ErrorResponse = {
-  status: "error";
+type ErrorResponse<T = Data> = {
+  status: 'error';
   message: string;
   code?: string | number;
-  data?: any;
+  data?: T;
 };
 
-export type ApiResponse<T = any> =
+export type ApiResponse<T = Data> =
   | SuccessResponse<T>
   | FailResponse<T>
-  | ErrorResponse;
+  | ErrorResponse<T>;
 
-export function successResponse<T = any>(data: T): SuccessResponse<T> {
+export function successResponse<T = Data>(data: T): SuccessResponse<T> {
   return {
-    status: "success",
+    status: 'success',
     data,
   };
 }
 
-export function failResponse<T = any>(data: T): FailResponse<T> {
+export function failResponse<T = Data>(data: T): FailResponse<T> {
   return {
-    status: "fail",
+    status: 'fail',
     data,
   };
 }
 
-export function errorResponse(
+export function errorResponse<T = Data>(
   message: string,
   code?: string | number,
-  data?: any,
-): ErrorResponse {
+  data?: T,
+): ErrorResponse<T> {
   return {
-    status: "error",
+    status: 'error',
     message,
-    ...(code && { code }),
-    ...(data && { data }),
+    ...(code ? { code } : {}),
+    ...(data ? { data } : {}),
   };
 }

@@ -1,10 +1,11 @@
-import { Router } from "express";
-import * as uploadsController from "./contoller";
+import { Router } from 'express';
+
+import * as uploadsController from './contoller';
 
 const uploadsModule = Router();
 
 uploadsModule
-  .route("/part")
+  .route('/part')
   .post(uploadsController.upload)
   .delete(uploadsController.abortUpload);
 

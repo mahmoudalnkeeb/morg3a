@@ -1,5 +1,6 @@
-import z from "zod";
-import { FaqFolderDTO } from "./faq-folder.dto";
+import type z from 'zod';
+
+import { FaqFolderDTO } from './faq-folder.dto';
 
 export const CreateFaqFolderDTO = FaqFolderDTO.omit({
   id: true,

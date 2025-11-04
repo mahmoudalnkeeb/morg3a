@@ -1,11 +1,11 @@
-import { parseCorsOrigin } from "@/utils/strings";
-import { z } from "zod";
-import { logger } from "./logger";
+import { z } from 'zod';
+
+import { logger } from './logger';
+
+import { parseCorsOrigin } from '@/utils/strings';
 
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(["development", "production", "test"])
-    .default("development"),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.string().optional(),
   BASE_URL: z.string().url().optional(),
   PLATFORM_NAME: z.string(),
@@ -14,12 +14,12 @@ const envSchema = z.object({
   REFRESH_TOKEN_SECRET: z.string().min(1),
 
   DB_HOST: z.string(),
-  DB_PORT: z.string().default("5432"),
+  DB_PORT: z.string().default('5432'),
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
 
-  CORS_ORIGIN: z.string().default("*"),
+  CORS_ORIGIN: z.string().default('*'),
 
   N_CLIENT_ID: z.string(),
   N_CLIENT_SECRET: z.string(),
@@ -43,23 +43,23 @@ try {
 } catch (err) {
   if (err instanceof z.ZodError) {
     const formattedErrors = err.issues.map((e) => {
-      const path = e.path.join(".");
+      const path = e.path.join('.');
       return `- ${path}: ${e.message}`;
     });
 
     logger.error(
       [
-        "❌ Invalid environment configuration detected:",
+        '❌ Invalid environment configuration detected:',
         ...formattedErrors,
-        "",
-        "💡 Fix the above environment variables and restart the server.",
-      ].join("\n"),
+        '',
+        '💡 Fix the above environment variables and restart the server.',
+      ].join('\n'),
     );
 
     process.exit(1);
   }
 
-  logger.error("Unexpected error during environment validation", {
+  logger.error('Unexpected error during environment validation', {
     error: err,
   });
   process.exit(1);
@@ -76,8 +76,8 @@ export const config = {
   jwt: {
     accessTokenSecret: validatedEnv.ACCESS_TOKEN_SECRET,
     refreshTokenSecret: validatedEnv.REFRESH_TOKEN_SECRET,
-    accessTokenExpiresIn: "15m",
-    refreshTokenExpiresIn: "7d",
+    accessTokenExpiresIn: '15m',
+    refreshTokenExpiresIn: '7d',
   },
   database: {
     host: validatedEnv.DB_HOST,
@@ -85,11 +85,11 @@ export const config = {
     user: validatedEnv.DB_USER,
     password: validatedEnv.DB_PASSWORD,
     database: validatedEnv.DB_NAME,
-    ssl: environment === "production",
+    ssl: environment === 'production',
   },
   corsOptions: {
     origin: parseCorsOrigin(validatedEnv.CORS_ORIGIN),
-    credentials: environment === "production",
+    credentials: environment === 'production',
   },
   notification: {
     clientId: validatedEnv.N_CLIENT_ID,
@@ -106,7 +106,7 @@ export const config = {
         secretAccessKey: validatedEnv.S3_SECRET_KEY,
       },
     },
-    publicEndpoint: validatedEnv.S3_PUBLIC_ENDPOINT || "http://localhost:9000",
+    publicEndpoint: validatedEnv.S3_PUBLIC_ENDPOINT || 'http://localhost:9000',
     bucket: validatedEnv.S3_BUCKET,
   },
   redis: {

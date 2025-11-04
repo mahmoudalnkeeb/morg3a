@@ -1,5 +1,6 @@
-import z from "zod";
-import { LessonDTO } from "./lesson.dto";
+import type z from 'zod';
+
+import { LessonDTO } from './lesson.dto';
 
 export const CreateLessonDTO = LessonDTO.omit({
   id: true,

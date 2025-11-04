@@ -1,10 +1,11 @@
-import z from "zod";
-import { CreateSupportTicketDTO } from "./create-support-ticket.dto";
+import type z from 'zod';
+
+import { CreateSupportTicketDTO } from './create-support-ticket.dto';
 
 export const UpdateSupportTicketDTO = CreateSupportTicketDTO.partial().refine(
   (data) => Object.keys(data).length > 0,
   {
-    message: "At least one field must be provided",
+    message: 'At least one field must be provided',
   },
 );
 

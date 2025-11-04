@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken";
-import { config } from "@/config";
+import jwt from 'jsonwebtoken';
+
+import { config } from '@/config';
 
 export function generateAccessToken(payload: object) {
   return jwt.sign(payload, config.jwt.accessTokenSecret, {

@@ -1,8 +1,10 @@
-import type { Request, Response } from "express";
-import * as quizService from "./service";
-import { CreateQuizDTO } from "./dtos/create-quiz.dto";
-import { failResponse, successResponse } from "@/utils/messages";
-import { UpdateQuizDTO } from "./dtos/update-quiz.dto";
+import type { Request, Response } from 'express';
+
+import { CreateQuizDTO } from './dtos/create-quiz.dto';
+import { UpdateQuizDTO } from './dtos/update-quiz.dto';
+import * as quizService from './service';
+
+import { failResponse, successResponse } from '@/utils/messages';
 
 export async function getQuizzes(req: Request, res: Response) {
   const page = Number(req.query.page || 1);
@@ -13,8 +15,7 @@ export async function getQuizzes(req: Request, res: Response) {
 
 export async function getQuiz(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const quiz = await quizService.getQuiz(id);
   res.json(successResponse(quiz));
 }
@@ -27,8 +28,7 @@ export async function createQuiz(req: Request, res: Response) {
 
 export async function updateQuiz(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const data = await UpdateQuizDTO.parseAsync(req.body);
   const quiz = await quizService.updateQuiz(id, data);
   res.json(successResponse(quiz));
@@ -36,8 +36,7 @@ export async function updateQuiz(req: Request, res: Response) {
 
 export async function deleteQuiz(req: Request, res: Response) {
   const id = Number(req.params.id);
-  if (!id)
-    return res.status(400).json(failResponse({ id: "invalid id parameter" }));
+  if (!id) return res.status(400).json(failResponse({ id: 'invalid id parameter' }));
   const deleted = await quizService.deleteQuiz(id);
   res.json(successResponse(deleted));
 }

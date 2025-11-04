@@ -1,5 +1,6 @@
-import z from "zod";
-import { SupportTicketDTO } from "./support-ticket.dto";
+import type z from 'zod';
+
+import { SupportTicketDTO } from './support-ticket.dto';
 
 export const CreateSupportTicketDTO = SupportTicketDTO.omit({
   id: true,

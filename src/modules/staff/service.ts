@@ -1,8 +1,9 @@
-import { db } from "@/db";
-import { createStaffRepository } from "./repository";
-import type { CreateStaffDTO } from "./dtos/create-staff.dto";
-import { NotFoundError } from "@/utils/errors";
-import { UpdateStaffDTO } from "./dtos/update-staff.dto";
+import type { CreateStaffDTO } from './dtos/create-staff.dto';
+import { type UpdateStaffDTO } from './dtos/update-staff.dto';
+import { createStaffRepository } from './repository';
+
+import { db } from '@/db';
+import { NotFoundError } from '@/utils/errors';
 
 const staffRepo = createStaffRepository(db);
 
@@ -12,7 +13,7 @@ export async function getStaff(page = 1, limit = 10) {
 
 export async function getStaffMember(id: number) {
   const staffMember = await staffRepo.getStaffMember(id);
-  if (!staffMember) throw new NotFoundError("Staff member not found");
+  if (!staffMember) throw new NotFoundError('Staff member not found');
   return staffMember;
 }
 
@@ -23,7 +24,7 @@ export async function createStaff(data: CreateStaffDTO) {
 
 export async function updateStaff(id: number, data: UpdateStaffDTO) {
   const existing = await staffRepo.getStaffMember(id);
-  if (!existing) throw new NotFoundError("Staff member not found");
+  if (!existing) throw new NotFoundError('Staff member not found');
 
   const updated = await staffRepo.updateStaff(id, data);
   return updated;
@@ -31,7 +32,7 @@ export async function updateStaff(id: number, data: UpdateStaffDTO) {
 
 export async function deleteStaff(id: number) {
   const existing = await staffRepo.getStaffMember(id);
-  if (!existing) throw new NotFoundError("Staff member not found");
+  if (!existing) throw new NotFoundError('Staff member not found');
 
   const deleted = await staffRepo.deleteStaff(id);
   return deleted;

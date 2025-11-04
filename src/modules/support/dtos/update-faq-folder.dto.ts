@@ -1,10 +1,11 @@
-import z from "zod";
-import { CreateFaqFolderDTO } from "./create-faq-folder.dto";
+import type z from 'zod';
+
+import { CreateFaqFolderDTO } from './create-faq-folder.dto';
 
 export const UpdateFaqFolderDTO = CreateFaqFolderDTO.partial().refine(
   (data) => Object.keys(data).length > 0,
   {
-    message: "At least one field must be provided",
+    message: 'At least one field must be provided',
   },
 );
 

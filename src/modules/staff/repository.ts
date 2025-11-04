@@ -1,9 +1,11 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { CreateStaffDTO } from "./dtos/create-staff.dto";
-import { StaffDTO } from "./dtos/staff.dto";
-import { eq } from "drizzle-orm";
-import { staff } from "@/db/schema";
-import { UpdateStaffDTO } from "./dtos/update-staff.dto";
+import { eq } from 'drizzle-orm';
+import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { type CreateStaffDTO } from './dtos/create-staff.dto';
+import { type StaffDTO } from './dtos/staff.dto';
+import { type UpdateStaffDTO } from './dtos/update-staff.dto';
+
+import { staff } from '@/db/schema';
 
 export function createStaffRepository(db: NodePgDatabase) {
   async function getStaff(page = 1, limit = 10): Promise<StaffDTO[]> {
@@ -28,18 +30,12 @@ export function createStaffRepository(db: NodePgDatabase) {
   }
 
   async function createStaff(data: CreateStaffDTO): Promise<StaffDTO> {
-    const staffMember: StaffDTO[] = await db
-      .insert(staff)
-      .values(data)
-      .returning();
+    const staffMember: StaffDTO[] = await db.insert(staff).values(data).returning();
 
     return staffMember[0];
   }
 
-  async function updateStaff(
-    id: number,
-    data: UpdateStaffDTO,
-  ): Promise<StaffDTO> {
+  async function updateStaff(id: number, data: UpdateStaffDTO): Promise<StaffDTO> {
     const staffMember: StaffDTO[] = await db
       .update(staff)
       .set(data)

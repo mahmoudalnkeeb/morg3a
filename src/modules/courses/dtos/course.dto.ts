@@ -1,6 +1,7 @@
-import { courses } from "@/db/schema";
-import { createSelectSchema } from "drizzle-zod";
-import z from "zod";
+import { createSelectSchema } from 'drizzle-zod';
+import type z from 'zod';
+
+import { courses } from '@/db/schema';
 
 export const CourseDTO = createSelectSchema(courses);
 

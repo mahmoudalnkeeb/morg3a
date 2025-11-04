@@ -1,15 +1,16 @@
-import { Router } from "express";
-import * as gradesController from "./controller";
+import { Router } from 'express';
+
+import * as gradesController from './controller';
 
 const gradesModule = Router();
 
 gradesModule
-  .route("/")
+  .route('/')
   .get(gradesController.getGrades)
   .post(gradesController.createGrade);
 
 gradesModule
-  .route("/:id")
+  .route('/:id')
   .get(gradesController.getGrade)
   .patch(gradesController.updateGrade)
   .delete(gradesController.deleteGrade);

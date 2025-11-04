@@ -1,4 +1,4 @@
-import notificationapi from "notificationapi-node-server-sdk";
+import notificationapi from 'notificationapi-node-server-sdk';
 
 type Parameters = { [key: string]: string };
 
@@ -9,7 +9,7 @@ export async function sendSmsTemplate(
   parameters: Parameters,
 ) {
   return await notificationapi.send({
-    type: "login_otp",
+    type: 'login_otp',
     to: {
       id: userId,
       number,
@@ -21,7 +21,7 @@ export async function sendSmsTemplate(
 
 export async function sendSms(number: string, userId: string, message: string) {
   return await notificationapi.send({
-    type: "login_otp",
+    type: 'login_otp',
     to: {
       id: userId,
       number,

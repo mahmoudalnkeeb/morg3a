@@ -1,8 +1,9 @@
-import type { Request, Response, NextFunction } from "express";
-import { errorResponse } from "@/utils/messages";
-import z from "zod";
-import { NotFoundError } from "@/utils/errors";
-import { logger } from "@/config";
+import type { Request, Response, NextFunction } from 'express';
+import z from 'zod';
+
+import { logger } from '@/config';
+import { NotFoundError } from '@/utils/errors';
+import { errorResponse } from '@/utils/messages';
 
 export default function errorHandler(
   err: Error | NotFoundError | z.ZodError,
@@ -14,18 +15,18 @@ export default function errorHandler(
     logger.error(err);
     console.error(err);
 
-    let message = err.message || "Internal Server Error";
+    let message = err.message || 'Internal Server Error';
     let body = {};
     let code = 500;
 
     if (err instanceof z.ZodError) {
-      message = "Invalid Input";
+      message = 'Invalid Input';
       body = err.issues;
       code = 422;
     }
 
     if (err instanceof NotFoundError) {
-      message = err.message || "Resource Not Found";
+      message = err.message || 'Resource Not Found';
       code = err.code || 404;
     }
 

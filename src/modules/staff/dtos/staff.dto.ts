@@ -1,6 +1,7 @@
-import { staff } from "@/db/schema";
-import { createSelectSchema } from "drizzle-zod";
-import z from "zod";
+import { createSelectSchema } from 'drizzle-zod';
+import type z from 'zod';
+
+import { staff } from '@/db/schema';
 
 export const StaffDTO = createSelectSchema(staff);
 

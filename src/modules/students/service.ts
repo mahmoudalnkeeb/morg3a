@@ -1,8 +1,9 @@
-import { db } from "@/db";
-import { createStudentsRepository } from "./repository";
-import type { CreateStudentDTO } from "./dtos/create-student.dto";
-import { NotFoundError } from "@/utils/errors";
-import { UpdateStudentDTO } from "./dtos/update-student.dto";
+import type { CreateStudentDTO } from './dtos/create-student.dto';
+import { type UpdateStudentDTO } from './dtos/update-student.dto';
+import { createStudentsRepository } from './repository';
+
+import { db } from '@/db';
+import { NotFoundError } from '@/utils/errors';
 
 const studentsRepo = createStudentsRepository(db);
 
@@ -12,7 +13,7 @@ export async function getStudents(page = 1, limit = 10) {
 
 export async function getStudent(id: number) {
   const student = await studentsRepo.getStudent(id);
-  if (!student) throw new NotFoundError("Student not found");
+  if (!student) throw new NotFoundError('Student not found');
   return student;
 }
 
@@ -23,7 +24,7 @@ export async function createStudent(data: CreateStudentDTO) {
 
 export async function updateStudent(id: number, data: UpdateStudentDTO) {
   const existing = await studentsRepo.getStudent(id);
-  if (!existing) throw new NotFoundError("Student not found");
+  if (!existing) throw new NotFoundError('Student not found');
 
   const updated = await studentsRepo.updateStudent(id, data);
   return updated;
@@ -31,7 +32,7 @@ export async function updateStudent(id: number, data: UpdateStudentDTO) {
 
 export async function deleteStudent(id: number) {
   const existing = await studentsRepo.getStudent(id);
-  if (!existing) throw new NotFoundError("Student not found");
+  if (!existing) throw new NotFoundError('Student not found');
 
   const deleted = await studentsRepo.deleteStudent(id);
   return deleted;

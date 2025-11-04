@@ -1,6 +1,7 @@
-import { faqFolders } from "@/db/schema";
-import { createSelectSchema } from "drizzle-zod";
-import z from "zod";
+import { createSelectSchema } from 'drizzle-zod';
+import type z from 'zod';
+
+import { faqFolders } from '@/db/schema';
 
 export const FaqFolderDTO = createSelectSchema(faqFolders);
 

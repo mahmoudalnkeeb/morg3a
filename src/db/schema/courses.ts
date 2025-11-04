@@ -6,20 +6,21 @@ import {
   integer,
   boolean,
   timestamp,
-} from "drizzle-orm/pg-core";
-import { staff } from "./staff";
-import { grades } from "./grades";
+} from 'drizzle-orm/pg-core';
 
-export const courses = pgTable("courses", {
-  id: serial("id").primaryKey(),
-  title: varchar("title", { length: 200 }).notNull(),
-  description: text("description"),
-  teacherId: integer("teacher_id")
-    .references(() => staff.id, { onDelete: "cascade" })
+import { grades } from './grades';
+import { staff } from './staff';
+
+export const courses = pgTable('courses', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 200 }).notNull(),
+  description: text('description'),
+  teacherId: integer('teacher_id')
+    .references(() => staff.id, { onDelete: 'cascade' })
     .notNull(),
-  gradeId: integer("grade_id").references(() => grades.id, {
-    onDelete: "set null",
+  gradeId: integer('grade_id').references(() => grades.id, {
+    onDelete: 'set null',
   }),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
 });

@@ -1,15 +1,17 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { CreateSupportTicketDTO } from "./dtos/create-support-ticket.dto";
-import { SupportTicketDTO } from "./dtos/support-ticket.dto";
-import { CreateFaqFolderDTO } from "./dtos/create-faq-folder.dto";
-import { FaqFolderDTO } from "./dtos/faq-folder.dto";
-import { CreateFaqQuestionDTO } from "./dtos/create-faq-question.dto";
-import { FaqQuestionDTO } from "./dtos/faq-question.dto";
-import { UpdateSupportTicketDTO } from "./dtos/update-support-ticket.dto";
-import { UpdateFaqFolderDTO } from "./dtos/update-faq-folder.dto";
-import { UpdateFaqQuestionDTO } from "./dtos/update-faq-question.dto";
-import { eq } from "drizzle-orm";
-import { supportTickets, faqFolders, faqQuestions } from "@/db/schema";
+import { eq } from 'drizzle-orm';
+import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { type CreateFaqFolderDTO } from './dtos/create-faq-folder.dto';
+import { type CreateFaqQuestionDTO } from './dtos/create-faq-question.dto';
+import { type CreateSupportTicketDTO } from './dtos/create-support-ticket.dto';
+import { type FaqFolderDTO } from './dtos/faq-folder.dto';
+import { type FaqQuestionDTO } from './dtos/faq-question.dto';
+import { type SupportTicketDTO } from './dtos/support-ticket.dto';
+import { type UpdateFaqFolderDTO } from './dtos/update-faq-folder.dto';
+import { type UpdateFaqQuestionDTO } from './dtos/update-faq-question.dto';
+import { type UpdateSupportTicketDTO } from './dtos/update-support-ticket.dto';
+
+import { supportTickets, faqFolders, faqQuestions } from '@/db/schema';
 
 export function createSupportRepository(db: NodePgDatabase) {
   // Support Tickets
@@ -34,7 +36,9 @@ export function createSupportRepository(db: NodePgDatabase) {
     return ticket[0] || null;
   }
 
-  async function createSupportTicket(data: CreateSupportTicketDTO): Promise<SupportTicketDTO> {
+  async function createSupportTicket(
+    data: CreateSupportTicketDTO,
+  ): Promise<SupportTicketDTO> {
     const ticket: SupportTicketDTO[] = await db
       .insert(supportTickets)
       .values(data)
@@ -88,10 +92,7 @@ export function createSupportRepository(db: NodePgDatabase) {
   }
 
   async function createFaqFolder(data: CreateFaqFolderDTO): Promise<FaqFolderDTO> {
-    const folder: FaqFolderDTO[] = await db
-      .insert(faqFolders)
-      .values(data)
-      .returning();
+    const folder: FaqFolderDTO[] = await db.insert(faqFolders).values(data).returning();
 
     return folder[0];
   }

@@ -1,5 +1,6 @@
-import z from "zod";
-import { GradeDTO } from "./grade.dto";
+import type z from 'zod';
+
+import { GradeDTO } from './grade.dto';
 
 export const CreateGradeDTO = GradeDTO.omit({
   id: true,

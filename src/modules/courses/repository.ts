@@ -1,9 +1,11 @@
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { CreateCourseDTO } from "./dtos/create-course.dto";
-import { CourseDTO } from "./dtos/course.dto";
-import { eq } from "drizzle-orm";
-import { courses } from "@/db/schema";
-import { UpdateCourseDTO } from "./dtos/update-course.dto";
+import { eq } from 'drizzle-orm';
+import { type NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { type CourseDTO } from './dtos/course.dto';
+import { type CreateCourseDTO } from './dtos/create-course.dto';
+import { type UpdateCourseDTO } from './dtos/update-course.dto';
+
+import { courses } from '@/db/schema';
 
 export function createCoursesRepository(db: NodePgDatabase) {
   async function getCourses(page = 1, limit = 10): Promise<CourseDTO[]> {
@@ -28,18 +30,12 @@ export function createCoursesRepository(db: NodePgDatabase) {
   }
 
   async function createCourse(data: CreateCourseDTO): Promise<CourseDTO> {
-    const course: CourseDTO[] = await db
-      .insert(courses)
-      .values(data)
-      .returning();
+    const course: CourseDTO[] = await db.insert(courses).values(data).returning();
 
     return course[0];
   }
 
-  async function updateCourse(
-    id: number,
-    data: UpdateCourseDTO,
-  ): Promise<CourseDTO> {
+  async function updateCourse(id: number, data: UpdateCourseDTO): Promise<CourseDTO> {
     const course: CourseDTO[] = await db
       .update(courses)
       .set(data)

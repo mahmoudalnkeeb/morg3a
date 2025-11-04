@@ -1,5 +1,5 @@
-import { MINUTE_IN_SECONDS } from "@/config/constants";
-import { getRedis } from "@/config/redis";
+import { MINUTE_IN_SECONDS } from '@/config/constants';
+import { getRedis } from '@/config/redis';
 
 interface OtpOptions {
   ttlSeconds?: number;

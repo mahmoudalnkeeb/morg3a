@@ -1,21 +1,19 @@
-import { config, s3, s3Public } from "@/config";
 import {
   AbortMultipartUploadCommand,
-  CompletedPart,
+  type CompletedPart,
   CompleteMultipartUploadCommand,
   CreateMultipartUploadCommand,
   GetObjectCommand,
   ListPartsCommand,
   UploadPartCommand,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+import { config, s3, s3Public } from '@/config';
 
 const BUCKET = config.s3.bucket;
 
-export async function initMultipartUpload(
-  filename: string,
-  contentType: string,
-) {
+export async function initMultipartUpload(filename: string, contentType: string) {
   const cmd = new CreateMultipartUploadCommand({
     Bucket: BUCKET,
     Key: filename,

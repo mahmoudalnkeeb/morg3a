@@ -1,10 +1,11 @@
-import z from "zod";
-import { CreateCourseDTO } from "./create-course.dto";
+import type z from 'zod';
+
+import { CreateCourseDTO } from './create-course.dto';
 
 export const UpdateCourseDTO = CreateCourseDTO.partial().refine(
   (data) => Object.keys(data).length > 0,
   {
-    message: "At least one field must be provided",
+    message: 'At least one field must be provided',
   },
 );
 
