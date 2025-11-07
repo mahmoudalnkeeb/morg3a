@@ -6,58 +6,58 @@
 
 ## Table of Contents
 
-* [Overview](#overview)
-* [Features](#features)
-* [Tech Stack](#tech-stack)
-* [Architecture Overview](#architecture-overview)
-* [Environment Variables](#environment-variables)
-* [Setup & Running Locally](#setup--running-locally)
-* [Database & Migrations](#database--migrations)
-* [Authentication & Authorization](#authentication--authorization)
-* [Logging](#logging)
-* [Example .env](#example-env)
-* [Useful Scripts](#useful-scripts)
-* [License](#license)
-* [Contact](#contact)
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture Overview](#architecture-overview)
+- [Environment Variables](#environment-variables)
+- [Setup & Running Locally](#setup--running-locally)
+- [Database & Migrations](#database--migrations)
+- [Authentication & Authorization](#authentication--authorization)
+- [Logging](#logging)
+- [Example .env](#example-env)
+- [Useful Scripts](#useful-scripts)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
 ## Overview
 
-* **Entry point:** `src/server.ts`
-* **API base path:** `/api`
-* **Configuration validation:** Handled by Zod (`src/config/env.ts`)
-* **Database:** PostgreSQL via Drizzle ORM
-* **Cache:** Redis for ephemeral data (e.g., OTPs)
-* **Storage:** S3-compatible (supports MinIO)
-* **Logging:** Winston
-* **Notifications:** NotificationAPI SDK
+- **Entry point:** `src/server.ts`
+- **API base path:** `/api`
+- **Configuration validation:** Handled by Zod (`src/config/env.ts`)
+- **Database:** PostgreSQL via Drizzle ORM
+- **Cache:** Redis for ephemeral data (e.g., OTPs)
+- **Storage:** S3-compatible (supports MinIO)
+- **Logging:** Winston
+- **Notifications:** NotificationAPI SDK
 
 ---
 
 ## Features
 
-* Student registration, profile, and enrollment management
-* Teacher and staff management with roles (teacher, admin, support_agent)
-* Courses, lessons, documents, and videos management
-* Quizzes and question bank system
-* Support ticketing system with attachments and categories
-* OTP-based authentication and notifications
-* File uploads to S3/MinIO
+- Student registration, profile, and enrollment management
+- Teacher and staff management with roles (teacher, admin, support_agent)
+- Courses, lessons, documents, and videos management
+- Quizzes and question bank system
+- Support ticketing system with attachments and categories
+- OTP-based authentication and notifications
+- File uploads to S3/MinIO
 
 ---
 
 ## Tech Stack
 
-* **Node.js** 20
-* **Express** 5
-* **TypeScript** 5
-* **PostgreSQL** + **Drizzle ORM**
-* **Redis** (via node-redis)
-* **Zod** for runtime validation
-* **AWS S3 SDK** (MinIO-compatible)
-* **Winston** for structured logging
-* **JWT** for authentication
+- **Node.js** 20
+- **Express** 5
+- **TypeScript** 5
+- **PostgreSQL** + **Drizzle ORM**
+- **Redis** (via node-redis)
+- **Zod** for runtime validation
+- **AWS S3 SDK** (MinIO-compatible)
+- **Winston** for structured logging
+- **JWT** for authentication
 
 ---
 
@@ -158,32 +158,30 @@ docker-compose down
 
 ## Database & Migrations
 
-* **ORM:** Drizzle ORM using PostgreSQL `Pool`
-* **Schemas:** `src/db/schema/`
-* **Command:** `npm run migrate` (runs drizzle-kit migrations)
+- **ORM:** Drizzle ORM using PostgreSQL `Pool`
+- **Schemas:** `src/db/schema/`
+- **Command:** `npm run migrate` (runs drizzle-kit migrations)
 
 ---
 
 ## Authentication & Authorization
 
-* **JWT Utilities:** `src/lib/jwt.ts`
+- **JWT Utilities:** `src/lib/jwt.ts`
+  - Access Token: 15m expiry
+  - Refresh Token: 7d expiry
 
-  * Access Token: 15m expiry
-  * Refresh Token: 7d expiry
+- **Middlewares:**
+  - `authenticate`: Verifies JWT
+  - `authorize`: Enforces role-based access
 
-* **Middlewares:**
-
-  * `authenticate`: Verifies JWT
-  * `authorize`: Enforces role-based access
-
-* **Roles:** `student`, `teacher`, `support_agent`, `admin`
+- **Roles:** `student`, `teacher`, `support_agent`, `admin`
 
 ## Logging
 
-* **Library:** Winston
-* **Location:** `src/config/logger.ts`
-* Logs output to both `stdout` and `./logs/output.log`
-* The logs directory is created automatically.
+- **Library:** Winston
+- **Location:** `src/config/logger.ts`
+- Logs output to both `stdout` and `./logs/output.log`
+- The logs directory is created automatically.
 
 ---
 
