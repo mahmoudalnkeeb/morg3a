@@ -5,10 +5,6 @@ interface OtpOptions {
   ttlSeconds?: number;
 }
 
-interface RefreshOptions {
-  ttlSeconds?: number;
-}
-
 const DEFAULT_OTP_TTL = 5 * MINUTE_IN_SECONDS;
 
 export async function setOtp(

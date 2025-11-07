@@ -1,13 +1,23 @@
 import { Router } from 'express';
 
 import * as staffController from './controller';
+import { authenticate } from '@/middlewares/authentication';
+import { authorize } from '@/middlewares/authorization';
 
 const staffModule = Router();
 
-staffModule.get('/', staffController.getStaff);
-staffModule.get('/:id', staffController.getStaffMember);
-staffModule.post('/', staffController.createStaff);
-staffModule.patch('/:id', staffController.updateStaff);
-staffModule.delete('/:id', staffController.deleteStaff);
+staffModule.use(authenticate);
+
+// TODO: review permissions
+staffModule
+  .route('/')
+  .get(authorize(['admin', 'teacher']), staffController.getStaff)
+  .post(authorize(['admin', 'teacher']), staffController.createStaff);
+
+staffModule
+  .route('/:id')
+  .get(authorize(['admin', 'teacher']), staffController.getStaffMember)
+  .patch(authorize(['admin', 'teacher']), staffController.updateStaff)
+  .delete(authorize(['admin', 'teacher']), staffController.deleteStaff);
 
 export default staffModule;

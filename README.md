@@ -1,313 +1,245 @@
 # Morg3a Backend
 
-**Morg3a** is a comprehensive e-learning platform backend that helps teachers organize their lessons and enables students to learn more effectively. This is the REST API backend built with Node.js, Express, and TypeScript.
+**Morg3a** is a modular, high-performance e-learning backend designed for the Egyptian secondary education system. It enables teachers to manage lessons efficiently and helps students learn effectively. The platform is powered by **Node.js**, **Express**, and **TypeScript**, following clean architecture principles.
+
+---
 
 ## Table of Contents
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the Application](#running-the-application)
-- [API Structure](#api-structure)
-- [Database Schema](#database-schema)
-- [Docker Deployment](#docker-deployment)
-- [Development](#development)
-- [License](#license)
-- [Contact](#contact)
+* [Overview](#overview)
+* [Features](#features)
+* [Tech Stack](#tech-stack)
+* [Architecture Overview](#architecture-overview)
+* [Environment Variables](#environment-variables)
+* [Setup & Running Locally](#setup--running-locally)
+* [Database & Migrations](#database--migrations)
+* [Authentication & Authorization](#authentication--authorization)
+* [Logging](#logging)
+* [Example .env](#example-env)
+* [Useful Scripts](#useful-scripts)
+* [License](#license)
+* [Contact](#contact)
+
+---
+
+## Overview
+
+* **Entry point:** `src/server.ts`
+* **API base path:** `/api`
+* **Configuration validation:** Handled by Zod (`src/config/env.ts`)
+* **Database:** PostgreSQL via Drizzle ORM
+* **Cache:** Redis for ephemeral data (e.g., OTPs)
+* **Storage:** S3-compatible (supports MinIO)
+* **Logging:** Winston
+* **Notifications:** NotificationAPI SDK
+
+---
 
 ## Features
 
-### Student Management
-- Student registration and profile management
-- Student enrollment by grade
-- Parent contact information tracking
-- Location tracking (country, city)
+* Student registration, profile, and enrollment management
+* Teacher and staff management with roles (teacher, admin, support_agent)
+* Courses, lessons, documents, and videos management
+* Quizzes and question bank system
+* Support ticketing system with attachments and categories
+* OTP-based authentication and notifications
+* File uploads to S3/MinIO
 
-### Course & Lesson Management
-- Course creation and organization
-- Lesson management with ordering
-- Video content hosting
-- Interactive quizzes
-- Document management (lesson documents, summaries/mozakrat, notes/mol5as)
-
-### Staff Management
-- Multi-role system: Teacher, Support Agent, Admin
-- Staff authentication and authorization
-- Role-based access control
-
-### Grade Management
-- Grade levels with specialization tracking
-- Year-based organization
-- Active/inactive status management
-
-### Support System
-- Ticket creation and management
-- Categorized tickets (technical, payment, general)
-- Ticket status tracking (open, in progress, closed)
-- Image attachments support
-
-### FAQ System
-- Organized FAQ folders
-- Questions and answers management
-- Tag-based organization
-- View tracking
+---
 
 ## Tech Stack
 
-- **Runtime**: Node.js 20
-- **Framework**: Express.js 5.x
-- **Language**: TypeScript 5.9
-- **Database**: PostgreSQL 18
-- **ORM**: Drizzle ORM
-- **Validation**: Zod
-- **File Storage**: AWS S3 / MinIO
-- **Authentication**: JWT (JSON Web Tokens)
-- **Security**: Helmet, CORS, bcrypt
-- **Logging**: Winston
-- **Notifications**: NotificationAPI
-- **Containerization**: Docker & Docker Compose
+* **Node.js** 20
+* **Express** 5
+* **TypeScript** 5
+* **PostgreSQL** + **Drizzle ORM**
+* **Redis** (via node-redis)
+* **Zod** for runtime validation
+* **AWS S3 SDK** (MinIO-compatible)
+* **Winston** for structured logging
+* **JWT** for authentication
 
-## Architecture
+---
 
-The project follows a modular architecture pattern:
+## Architecture Overview
 
 ```
 src/
-├── app.ts              # Express app configuration
-├── server.ts           # Server entry point
-├── config/             # Configuration management
-│   ├── env.ts         # Environment variables
-│   ├── logger.ts      # Winston logger setup
-│   ├── s3.ts          # S3/MinIO configuration
-│   └── notification-api.ts
-├── db/                 # Database layer
-│   └── schema/        # Drizzle schema definitions
-├── modules/            # Feature modules
-│   ├── auth/          # Authentication
-│   ├── students/      # Student management
-│   ├── staff/         # Staff management
-│   ├── courses/       # Course management
-│   ├── lessons/       # Lesson management
-│   ├── quizzes/       # Quiz management
-│   ├── grades/        # Grade management
-│   └── support/       # Support tickets
-├── middlewares/        # Express middlewares
-│   ├── error.ts       # Error handling
-│   └── notFound.ts    # 404 handler
-└── utils/              # Utility functions
-    ├── errors.ts      # Error utilities
-    ├── messages.ts    # Message utilities
-    ├── notifications.ts
-    ├── otp.ts         # OTP generation
-    ├── s3.ts          # S3 operations
-    └── strings.ts     # String utilities
+├── app.ts              # Express configuration
+├── server.ts           # Application entry point
+├── config/             # Environment, logger, S3, Redis, notifications
+├── db/                 # Database connection & schema
+├── lib/                # Helpers (JWT, caching)
+├── middlewares/        # Auth, authorization, error handling
+├── modules/            # Feature-based modules
+├── types/              # Shared TypeScript interfaces
+└── utils/              # Common utilities (messages, errors, etc.)
 ```
 
-Each module follows a layered architecture:
-- **Controller**: Handles HTTP requests/responses
-- **Service**: Business logic
-- **Repository**: Data access layer
-- **DTOs**: Data validation schemas (Zod)
-- **Routes**: Express route definitions
+Each module follows a **layered structure**:
 
-##  Prerequisites
+```
+controllers → services → repositories → DTOs → routes
+```
 
-- Node.js 20+ and npm
-- PostgreSQL 18+
-- Docker & Docker Compose (optional, for containerized deployment)
-- MinIO or AWS S3 (for file storage)
+---
 
-## Installation
+## Environment Variables
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/mahmoudalnkeeb/morg3a.git
-   cd morg3a-be
-   ```
+Environment validation is enforced at startup via Zod.
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### Required
 
-3. **Set up environment variables** (see [Configuration](#configuration))
+```
+ACCESS_TOKEN_SECRET
+REFRESH_TOKEN_SECRET
+DB_HOST
+DB_USER
+DB_PASSWORD
+DB_NAME
+S3_ENDPOINT
+S3_REGION
+S3_ACCESS_KEY
+S3_SECRET_KEY
+S3_BUCKET
+N_CLIENT_ID
+N_CLIENT_SECRET
+N_BASE_URL
+N_OTP_TEMPLATE_ID
+REDIS_URL
+PLATFORM_NAME
+```
 
-4. **Set up the database**
-   ```bash
-   npm run migrate
-   ```
+### Optional / Defaults
 
-## Configuration
-
-Create a `.env` file in the root directory with the following variables:
-
-### Application
-```env
+```
 NODE_ENV=development
 PORT=3000
 BASE_URL=http://localhost:3000
-PLATFORM_NAME=morg3a
 CORS_ORIGIN=*
+S3_PUBLIC_ENDPOINT=http://localhost:9000
 ```
 
-### Database
-```env
+If any required variable is missing, the app logs detailed validation errors and exits.
+
+---
+
+## Setup & Running Locally
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+### Production
+
+```bash
+npm run build
+npm run start:prod
+```
+
+### Database Migrations
+
+```bash
+npm run migrate
+```
+
+### Docker Example
+
+```bash
+docker-compose up -d
+docker-compose logs -f api
+docker-compose down
+```
+
+---
+
+## Database & Migrations
+
+* **ORM:** Drizzle ORM using PostgreSQL `Pool`
+* **Schemas:** `src/db/schema/`
+* **Command:** `npm run migrate` (runs drizzle-kit migrations)
+
+---
+
+## Authentication & Authorization
+
+* **JWT Utilities:** `src/lib/jwt.ts`
+
+  * Access Token: 15m expiry
+  * Refresh Token: 7d expiry
+
+* **Middlewares:**
+
+  * `authenticate`: Verifies JWT
+  * `authorize`: Enforces role-based access
+
+* **Roles:** `student`, `teacher`, `support_agent`, `admin`
+
+## Logging
+
+* **Library:** Winston
+* **Location:** `src/config/logger.ts`
+* Logs output to both `stdout` and `./logs/output.log`
+* The logs directory is created automatically.
+
+---
+
+## Example .env
+
+```
+PLATFORM_NAME=morg3a
+NODE_ENV=development
+PORT=3000
+
+ACCESS_TOKEN_SECRET=replace_with_a_strong_secret
+REFRESH_TOKEN_SECRET=replace_with_a_strong_secret
+
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
+DB_USER=postgres
+DB_PASSWORD=postgres
 DB_NAME=morg3a
-```
 
-### File Storage (S3/MinIO)
-```env
+REDIS_URL=redis://localhost:6379
+
 S3_ENDPOINT=http://localhost:9000
 S3_REGION=us-east-1
 S3_ACCESS_KEY=minioadmin
 S3_SECRET_KEY=minioadmin
 S3_BUCKET=morg3a-files
-S3_USE_SSL=false
-```
+S3_PUBLIC_ENDPOINT=http://localhost:9000
 
-### Notifications (NotificationAPI)
-```env
-N_CLIENT_ID=your_notification_client_id
-N_CLIENT_SECRET=your_notification_client_secret
+N_CLIENT_ID=notification_client_id
+N_CLIENT_SECRET=notification_client_secret
 N_BASE_URL=https://api.notificationapi.com
-N_OTP_TEMPLATE_ID=your_otp_template_id
+N_OTP_TEMPLATE_ID=otp_template_id
 ```
 
-##  Running the Application
+---
 
-### Development Mode
+## Useful Scripts
+
 ```bash
-npm run dev
-```
-This runs the server with hot-reload using `tsx watch`.
-
-### Production Mode
-```bash
-npm run start:prod
-```
-This builds the TypeScript code and starts the production server.
-
-### Manual Build & Start
-```bash
-npm run build
-npm start
+npm run dev         # Run development server with hot reload
+npm run build       # Compile TypeScript + resolve aliases
+npm start           # Start built server
+npm run start:prod  # Build then start server
+npm run migrate     # Run database migrations
 ```
 
-### Database Migrations
-```bash
-# Generate new migration
-npm run migrate
-```
+---
 
-## API Structure
+## License
 
-The API is organized under the `/api` prefix:
+Copyright (c) 2025 Mahmoud Alnakeeb
+All rights reserved.
 
-### Available Endpoints
+This source code is made publicly available **for review and educational reference only**.
+Permission is granted **to view and read** the code.
+Use, modification, distribution, or derivative works of any kind are **strictly prohibited** without written consent.
 
-- **Health Check**: `GET /health`
-- **Students**: `/api/students`
-- **Staff**: `/api/staff`
-- **Courses**: `/api/courses`
-- **Lessons**: `/api/lessons`
-- **Quizzes**: `/api/quizzes`
-- **Grades**: `/api/grades`
-- **Support**: `/api/support`
-
-### API Documentation
-
-See `docs/data-models.md` for detailed DTO specifications and data models.
-
-## Database Schema
-
-The database includes the following main entities:
-
-- **students** - Student information and enrollment
-- **staff** - Staff members (teachers, support agents, admins)
-- **grades** - Grade levels and specializations
-- **courses** - Course information and metadata
-- **lessons** - Lessons within courses
-- **videos** - Video content for lessons
-- **documents** - Documents (lessons, mozakrat, mol5as)
-- **quizzes** - Quiz questions and answers
-- **support_tickets** - Support ticket management
-- **faq_folders** - FAQ organization
-- **faq_questions** - FAQ questions and answers
-
-See `src/db/schema/` for detailed schema definitions.
-
-### Enums
-
-- **Staff Roles**: `teacher`, `support_agent`, `admin`
-- **Document Types**: `lesson`, `mozakra`, `mol5as`
-- **Ticket Status**: `open`, `in_progress`, `closed`
-- **Ticket Category**: `technical`, `payment`, `general`
-
-## Docker Deployment
-
-The project includes Docker Compose configuration for easy deployment:
-
-### Using Docker Compose
-
-1. **Set up environment variables** in `.env`
-
-2. **Start all services**
-   ```bash
-   docker-compose up -d
-   ```
-
-This will start:
-- PostgreSQL database
-- MinIO object storage (ports 9000 for the server, and 9001 for web dashboard)
-- API server (port 3000)
-
-3. **View logs**
-   ```bash
-   docker-compose logs -f api
-   ```
-
-4. **Stop services**
-   ```bash
-   docker-compose down
-   ```
-
-### Docker Image
-
-Build the Docker image:
-```bash
-docker build -t morg3a-api .
-```
-
-Run the container:
-```bash
-docker run -p 3000:3000 --env-file .env morg3a-api
-```
-
-## Development
-
-### Project Scripts
-
-- `npm run dev` - Start development server with hot-reload
-- `npm run build` - Build TypeScript to JavaScript
-- `npm start` - Start production server
-- `npm run start:prod` - Build and start production server
-- `npm run migrate` - Generate and run database migrations
-
-### Code Structure
-
-- **TypeScript**: Strict type checking enabled
-- **Path Aliases**: Use `@/` prefix for imports from `src/`
-- **Linting**: Follow TypeScript best practices
-- **Error Handling**: Centralized error middleware
-- **Logging**: Winston logger with file and console transports
-
-##  License
-
-consider checking the project [LICENSE](LICENSE)
+See [LICENSE](./LICENSE) for full terms.
+For permissions, contact **[mahmoudalnakeeb@outlook.com](mailto:mahmoudalnakeeb@outlook.com)**.
