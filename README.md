@@ -69,11 +69,10 @@ src/
 ├── server.ts           # Application entry point
 ├── config/             # Environment, logger, S3, Redis, notifications
 ├── db/                 # Database connection & schema
-├── lib/                # Helpers (JWT, caching)
 ├── middlewares/        # Auth, authorization, error handling
 ├── modules/            # Feature-based modules
 ├── types/              # Shared TypeScript interfaces
-└── utils/              # Common utilities (messages, errors, etc.)
+└── utils/              # Common utilities and helpers (messages, errors, jwt, caching etc.)
 ```
 
 Each module follows a **layered structure**:
