@@ -70,11 +70,11 @@ export async function refreshToken(token: string) {
 
   const newAccessToken = generateAccessToken({
     userId: payload.userId,
-    role: payload.role,
+    role: payload.role == 'student' ? 'student' : 'staff',
   });
   const newRefreshToken = generateRefreshToken({
     userId: payload.userId,
-    role: payload.role,
+    role: payload.role == 'student' ? 'student' : 'staff',
   });
 
   await authRepository.revokeRefreshToken(token);
