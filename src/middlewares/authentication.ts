@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
-import { verifyAccessToken } from '@/lib/jwt';
 import type { UserRequest } from '@/types';
+import { verifyAccessToken } from '@/utils/jwt';
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization?.split(' ')[1];

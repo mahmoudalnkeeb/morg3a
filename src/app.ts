@@ -1,11 +1,11 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-
 import { config, logger } from '@/config';
 import { db } from '@/db';
 import errorHandler from '@/middlewares/error';
 import notFound from '@/middlewares/notFound';
+import authModule from '@/modules/auth';
 import coursesModule from '@/modules/courses';
 import gradesModule from '@/modules/grades';
 import lessonsModule from '@/modules/lessons';
@@ -56,6 +56,7 @@ apiRouter.use('/lessons', lessonsModule);
 apiRouter.use('/quizzes', quizzesModule);
 apiRouter.use('/support', supportModule);
 apiRouter.use('/upload', uploadsModule);
+apiRouter.use('/auth', authModule);
 
 app.use('/api', apiRouter);
 

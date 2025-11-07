@@ -3,10 +3,13 @@ import type { StudentLoginDtoType } from './dtos/student-login.dto';
 import { createAuthRepository } from './repository';
 import { constants, logger } from '@/config';
 import { db } from '@/db';
-
-import { setOtp, verifyOtp } from '@/lib/caching';
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@/lib/jwt';
 import type { Role } from '@/types';
+import { setOtp, verifyOtp } from '@/utils/caching';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from '@/utils/jwt';
 import { generateOtp } from '@/utils/otp';
 
 const authRepository = createAuthRepository(db);
