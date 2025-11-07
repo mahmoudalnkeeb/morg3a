@@ -1,4 +1,3 @@
-import type { Role } from './dtos/refresh-token.dto';
 import type { StaffLoginDtoType } from './dtos/staff-login.dto';
 import type { StudentLoginDtoType } from './dtos/student-login.dto';
 import { createAuthRepository } from './repository';
@@ -7,6 +6,7 @@ import { db } from '@/db';
 
 import { setOtp, verifyOtp } from '@/lib/caching';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@/lib/jwt';
+import type { Role } from '@/types';
 import { generateOtp } from '@/utils/otp';
 
 const authRepository = createAuthRepository(db);
