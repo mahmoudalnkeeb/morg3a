@@ -1,6 +1,13 @@
-import { pgTable, varchar, timestamp, serial, integer } from 'drizzle-orm/pg-core';
-
+import {
+  pgTable,
+  varchar,
+  timestamp,
+  serial,
+  integer,
+  boolean,
+} from 'drizzle-orm/pg-core';
 import { grades } from './grades';
+import { staff } from './staff';
 
 export const students = pgTable('students', {
   id: serial('id').primaryKey(),
@@ -13,6 +20,9 @@ export const students = pgTable('students', {
   gradeId: integer('grade_id').references(() => grades.id, {
     onDelete: 'set null',
   }),
+  isActive: boolean('is_active').default(true).notNull(),
+  deactivatedAt: timestamp('deactivated_at'),
+  deactivatedBy: integer('deactivated_by').references(() => staff.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
